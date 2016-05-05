@@ -6,7 +6,7 @@ Case study on biodiversity data:
 Given a forest with N treatment units. Each unit has a number of species of
 interest. The owner decides to set aside Y units for preservation.
 
-Which selection of Y units gives the lartest number of species?
+Which selection of Y units gives the largest number of species?
 
 In this setup there is
 
