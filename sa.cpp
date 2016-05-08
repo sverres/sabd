@@ -49,6 +49,7 @@ int max_Z;              //max value on each step
 
 void print_usage();
 void init(int * _solution);
+bool unique_units(int * _solution);
 int  stopcriterion();
 void generate(int * _solution, int * _candidate_solution);
 int  eval_obj_f(int * _canditate_solution);
@@ -86,7 +87,10 @@ int main( int argc, char *argv[])
     ck = ck_0;
     Lk = Lk_0;
 
-    init(solution);
+    do
+    {
+      init( solution );
+    } while ( !unique_units( solution ));
 
     Z = eval_obj_f(solution);
 
@@ -104,7 +108,12 @@ int main( int argc, char *argv[])
 
         for ( int l = 0; l < Lk; l++ )
         {
-            generate(solution, candidate_solution);
+            //generate(solution, candidate_solution);
+
+            do
+            {
+              generate(solution, candidate_solution);
+            } while ( !unique_units( candidate_solution ));
 
             new_Z = eval_obj_f(candidate_solution);
 
@@ -181,6 +190,24 @@ void init(int * _solution )
 
         seed = seed + 173;
     }
+}
+
+// test if units in solution are unique
+
+bool unique_units (int * _solution )
+{
+  bool _unique = true;
+  for (int i = 0; i < MAX_SELECTED; i++)
+  {
+    for (int j = 0; j < MAX_SELECTED; j++)
+    {
+        if ((i != j) && (_solution[ i ] == _solution[ j ]))
+        {
+          _unique = false;
+        };
+    }
+    return _unique;
+  }
 }
 
 
