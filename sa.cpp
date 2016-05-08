@@ -13,7 +13,7 @@
 //
 
 
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -60,6 +60,7 @@ void calculate_control(float _red_rate);
 void print_result();
 int  random(int _seed, int _mod);
 
+using namespace std;
 
 // main function
 
@@ -138,7 +139,7 @@ int main( int argc, char *argv[])
         if ( outlevel > 1 )
         {
              cout << "Max_Z: " << max_Z << "   step: " << k+1 << "   ck: " << ck
-                  << "\    accepted/trials: "<< accepted << "/" << Lk << "\n";
+                  << "    accepted/trials: "<< accepted << "/" << Lk << "\n";
         }
         if ( outlevel > 4 ) cout << "\n";
 
