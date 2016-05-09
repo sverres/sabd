@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+
 
 #define SPECIES 133          //number of species
 #define UNITS 155            //number of UNITS
@@ -58,7 +60,7 @@ void insert( int * _candidate_solution, int * _solution );
 void calculate_length();
 void calculate_control(float _red_rate);
 void print_result();
-int  random(int _seed, int _mod);
+int  random(int _max_val);
 
 using namespace std;
 
@@ -66,7 +68,6 @@ using namespace std;
 
 int main( int argc, char *argv[])
 {
-
     // command line argument handling
 
     if (argc < 4)
@@ -85,6 +86,8 @@ int main( int argc, char *argv[])
 
     ck = ck_0;
     Lk = Lk_0;
+
+    srand(time(NULL)); // random number generator initialization
 
     init(solution);
 
@@ -173,13 +176,9 @@ int main( int argc, char *argv[])
 void init(int * _solution )
 {
 
-    int seed =3412;
-
     for (int i = 0; i < MAX_SELECTED; i++)
     {
-        _solution[ i ] = random( seed, UNITS );
-
-        seed = seed + 173;
+        _solution[ i ] = random( UNITS );
     }
 }
 
@@ -188,18 +187,13 @@ void init(int * _solution )
 
 void generate(int * _solution, int * _candidate_solution)
 {
-    int seed = 0;
-
     for (int i = 0; i < MAX_SELECTED; i++)
     {
         _candidate_solution[ i ] = _solution[ i ];
     }
 
-    seed = m * 50 + 7369;  // arbritary chosen value
-    int position_to_change = random( seed, MAX_SELECTED );
-
-    seed = m * 10 + 3521;  // arbritary chosen value
-    int new_unit_selected  = random( seed, UNITS);
+    int position_to_change = random( MAX_SELECTED );
+    int new_unit_selected  = random( UNITS);
 
     _candidate_solution[ position_to_change ] = new_unit_selected;
 
@@ -321,14 +315,10 @@ int accept( int _new_Z, int _Z, int * _candidate_solution, int * _solution)
         float A    = (_new_Z - _Z) / ck;
         eval = exp( A );
 
-        int   seed = m * 13;
-
         //generate random number in [0, 1]
-
-        p    = random( seed, 1000) * 0.001;
+        p = random( 1000 ) * 0.001;
 
         // accept a non-improving solution?
-
         if (eval > p ) { yes_no = 1; }
     }
 
@@ -379,10 +369,8 @@ int stopcriterion()
 
 // random number function
 
-int random (int _seed, int _max_val)
+int random (int _max_val)
 {
-    srand(_seed);
-
     return (rand() % _max_val);
 }
 
