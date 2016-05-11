@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
   while (!stopcriterion()) {
 
-    // loop on each temperature
+    // loop on each step (temperature)
 
     max_Z = 0;
 
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
 
       new_Z = eval_obj_f(candidate_solution);
 
-      // save max Z value on each step (temperature)
+      // save max Z value on each iteration
 
       if (new_Z > max_Z) {
         max_Z = new_Z;
@@ -134,9 +134,9 @@ int main(int argc, char *argv[]) {
         Z = new_Z;
         accepted++;
       }
-      m++; // increment iteration counter
+      m++; // iteration counter
     }
-    k++; // increment step counter
+    k++; // step counter
 
     // print results from each step
 
@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
 
     accepted = 0;
     calculate_control(red_rate);
-
+    
   } // end main loop
 
   print_result();
@@ -169,8 +169,7 @@ int main(int argc, char *argv[]) {
 }
 
 //----------------------------------------------------------------------------//
-// init - set step length, control parameter
-// and a random initial soluton
+// init - generate a random initial soluton
 //----------------------------------------------------------------------------//
 void init(int *_solution) {
   for (int i = 0; i < MAX_SELECTED; i++) {
@@ -182,15 +181,14 @@ void init(int *_solution) {
 // test if units in solution are unique
 //----------------------------------------------------------------------------//
 bool unique_units(int *_solution) {
-  bool _unique = true;
   for (int i = 0; i < MAX_SELECTED; i++) {
     for (int j = 0; j < MAX_SELECTED; j++) {
       if ((i != j) && (_solution[i] == _solution[j])) {
-        _unique = false;
+        return false;
       };
     }
   }
-  return _unique;
+  return true;
 }
 
 //----------------------------------------------------------------------------//
@@ -222,7 +220,6 @@ int eval_obj_f(int *_solution) {
     // and count actual specie
 
     units_with_specie = 0;
-
     for (int j = 0; j < MAX_SELECTED; j++) {
       units_with_specie = units_with_specie + data[_solution[j]][i];
     }
@@ -231,7 +228,6 @@ int eval_obj_f(int *_solution) {
       species_in_solution++;
     }
   }
-
   return species_in_solution;
 }
 
@@ -245,7 +241,6 @@ void print_solution(int *_solution, int _Z) {
     // prints unit number starting with index 1
     cout << _solution[i] + 1 << "  ";
   }
-
   cout << "    m: " << m << "\n";
 }
 
@@ -254,8 +249,6 @@ void print_solution(int *_solution, int _Z) {
 //          replace current solution
 //----------------------------------------------------------------------------//
 bool accept(int _new_Z, int _Z, int *_candidate_solution, int *_solution) {
-
-  // test if the _candidate_solution differs from _solution
 
   int diff = 0;
   for (int i = 0; i < MAX_SELECTED; i++) {
