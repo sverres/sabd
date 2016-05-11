@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
   sscanf(argv[1], "%g", &ck_0);
   Lk_0 = atoi(argv[2]);
   sscanf(argv[3], "%g", &red_rate);
-  outlevel = atoi(argv[4]);
+  outlevel = atoi(argv[4]) || 0;
 
   // initialize parameters and make first solution
 
@@ -97,9 +97,6 @@ int main(int argc, char *argv[]) {
   Z = eval_obj_f(solution);
 
   max_Z = Z;
-
-  if (outlevel > 5)
-    print_solution(solution, Z);
 
   // main loop
 
@@ -122,17 +119,7 @@ int main(int argc, char *argv[]) {
         max_Z = new_Z;
       }
 
-      if (outlevel > 6)
-        print_solution(candidate_solution, new_Z);
-      if ((outlevel > 5) && (l > (Lk - 5)))
-        print_solution(candidate_solution, new_Z);
-
       if (accept(new_Z, Z, candidate_solution, solution)) {
-        if (outlevel == 5)
-          print_solution(candidate_solution, new_Z);
-        if (outlevel == 7)
-          cout << " - - - solution accepted\n";
-
         insert(candidate_solution, solution);
         Z = new_Z;
         accepted++;
@@ -140,19 +127,6 @@ int main(int argc, char *argv[]) {
       m++; // iteration counter
     }
     k++; // step counter
-
-    // print results from each step
-
-    if (outlevel == 1)
-      cout << ".";
-    if (outlevel > 4)
-      cout << "\n";
-    if (outlevel > 1) {
-      cout << "Max_Z: " << max_Z << "   step: " << k + 1 << "   ck: " << ck
-           << "    accepted/trials: " << accepted << "/" << Lk << "\n";
-    }
-    if (outlevel > 4)
-      cout << "\n";
 
     // update control parameters
 
@@ -329,11 +303,7 @@ void print_usage() {
   cout << "red_rate = temperature reduction rate     (e.g. 0.2)   \n";
   cout << "outlevel = output level control        (0,1,2,5,6,7) \n\n";
   cout << "  0 : only summary                                     \n";
-  cout << "  1 : one dot on each step                             \n";
-  cout << "  2 : summary data from each step                      \n";
-  cout << "  5 : prints every accepted solution                   \n";
-  cout << "  6 : prints 5 last generated solutions on each step   \n";
-  cout << "  7 : prints all generated solutions                 \n\n";
+  cout << "  1,2,5,6,7 : not in effect in this version            \n";
 }
 
 //----------------------------------------------------------------------------//
