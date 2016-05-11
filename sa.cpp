@@ -22,6 +22,9 @@
 #define UNITS 155       // number of UNITS
 #define MAX_SELECTED 10 // number of UNITS to be selected
 
+#define IMPROVEMENT_CRITERION 5       // part of stopcriterion
+#define TEMPERATURE_CRITERION 0.00001 // part of stopcriterion
+
 int data[UNITS][SPECIES] = // matrix of species composition
 #include "species.txt"
 
@@ -161,7 +164,7 @@ int main(int argc, char *argv[]) {
 
     accepted = 0;
     calculate_control(red_rate);
-    
+
   } // end main loop
 
   print_result();
@@ -301,7 +304,7 @@ void calculate_control(float _red_rate) { ck = ck - ck * _red_rate; }
 // stopcriterion based on non-improving steps
 //----------------------------------------------------------------------------//
 bool stopcriterion() {
-  if (no_improvement > 5 || ck < 0.00001) {
+  if (no_improvement > IMPROVEMENT_CRITERION || ck < TEMPERATURE_CRITERION) {
     return true;
   } else
     return false;
